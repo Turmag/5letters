@@ -1,7 +1,7 @@
 <template>
-    <div class="panel">
-        <div class="panel__title" v-html="title" />
-        <div class="panel__items">
+    <div :class="$style.panel">
+        <div :class="$style.title" v-html="title" />
+        <div :class="$style.items">
             <Item v-for="(item, i) in store.panelItems" :key="i" :item="item" />
         </div>
     </div>
@@ -17,7 +17,7 @@ const store = mainStore();
 const title = computed(() => 'Играйте <br />и получайте удовольствие!');
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
     .panel {
         position: fixed;
         bottom: 0;
@@ -28,19 +28,19 @@ const title = computed(() => 'Играйте <br />и получайте удо�
         padding: 30px;
         border-radius: 20px 20px 0 0;
         background-color: $gray-modal;
+    }
 
-        &__title {
-            text-align: center;
-            font-size: 30px;
-            line-height: 35px;
-            color: $yellow;
-            font-weight: bold;
-        }
+    .title {
+        text-align: center;
+        font-size: 30px;
+        line-height: 35px;
+        color: $yellow;
+        font-weight: bold;
+    }
 
-        &__items {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+    .items {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
     }
 </style>

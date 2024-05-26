@@ -11,8 +11,6 @@ declare module 'vue' {
     CarbonBadge: typeof import('~icons/carbon/badge')['default']
     CarbonCircleSolid: typeof import('~icons/carbon/circle-solid')['default']
     CarbonGift: typeof import('~icons/carbon/gift')['default']
-    CarbonGift2: typeof import('~icons/carbon/gift2')['default']
-    CarbonInfo: typeof import('~icons/carbon/info')['default']
     CarbonInformation: typeof import('~icons/carbon/information')['default']
     CarbonLink: typeof import('~icons/carbon/link')['default']
     CarbonReset: typeof import('~icons/carbon/reset')['default']

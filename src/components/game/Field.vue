@@ -2,7 +2,6 @@
     <input
         ref="input"
         v-model="letterValue"
-        class="field"
         :class="letterClass"
         :style="`animation-delay: ${index / 5}s`"
         maxlength="1"
@@ -18,6 +17,7 @@ import {
     computed,
     watch,
     onMounted,
+    useCssModule,
 } from 'vue';
 import { mainStore } from '@/store/main';
 import { Letter } from '@/services/types';
@@ -38,6 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['prev', 'next', 'enterFocus']);
 
 const store = mainStore();
+const $style = useCssModule();
 const input = ref();
 const letterValue = ref('');
 let isPossibleNext = false;
@@ -48,10 +49,11 @@ let isKeyDown = false;
 
 const isActiveCheck = computed(() => store.currentWord.join('').length === 5);
 const letterClass = computed(() => ({
-    'field--right': props.letter?.isRight,
-    'field--wrong': props.letter?.isWrong,
-    'field--almost': props.letter?.isAlmost,
-    'field--animate': props.isAnimate,
+    [$style.field]: true,
+    [$style.fieldRight]: props.letter?.isRight,
+    [$style.fieldWrong]: props.letter?.isWrong,
+    [$style.fieldAlmost]: props.letter?.isAlmost,
+    [$style.fieldAnimate]: props.isAnimate,
 }));
 
 const determineKeyupAction = async (e: KeyboardEvent) => {
@@ -60,11 +62,12 @@ const determineKeyupAction = async (e: KeyboardEvent) => {
             store.checkTrialAction();
             if ((store.isLost || store.isWin) && store.searchWords.length) {
                 const timeout = store.isWin ? 1600 : 0;
-                const btn = document.querySelector('.game__btn') as HTMLElement;
                 await setTimeout(() => {
+                    const btn = document.querySelector('[btn]') as HTMLElement;
                     btn.scrollIntoView({ behavior: 'smooth' });
                 }, timeout);
                 setTimeout(() => {
+                    const btn = document.querySelector('[btn]') as HTMLElement;
                     btn.focus();
                 }, 400);
             } else if ((store.isLost || store.isWin) && !store.searchWords.length) {
@@ -140,7 +143,7 @@ defineExpose({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
     .field {
         width: 100px;
         height: 100px;
@@ -151,27 +154,27 @@ defineExpose({
         text-align: center;
         font-size: 70px;
         color: $white;
+    }
 
-        &--right {
-            border-color: $yellow;
-            background-color: $yellow;
-            color: $black;
-        }
+    .fieldRight {
+        border-color: $yellow;
+        background-color: $yellow;
+        color: $black;
+    }
 
-        &--wrong {
-            border-color: $gray;
-            background-color: $gray;
-        }
+    .fieldWrong {
+        border-color: $gray;
+        background-color: $gray;
+    }
 
-        &--almost {
-            border-color: $white;
-            background-color: $white;
-            color: $black;
-        }
+    .fieldAlmost {
+        border-color: $white;
+        background-color: $white;
+        color: $black;
+    }
 
-        &--animate {
-            animation: scale 1s;
-        }
+    .fieldAnimate {
+        animation: scale 1s;
     }
 
     @keyframes scale {

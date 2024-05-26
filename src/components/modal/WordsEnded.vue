@@ -1,20 +1,20 @@
 <template>
     <vue-final-modal
         v-model="store.isShowWordsEnded"
-        classes="modal"
-        content-class="modal__content"
+        :classes="$style.modal"
+        :content-class="$style.content"
     >
-        <div class="modal__close" @click="closeModal">
+        <div :class="$style.close" @click="closeModal">
             <MdiClose color="#fff" width="20" height="20" />
         </div>
-        <div class="modal__content-inner">
-            <div class="modal__text">
+        <div :class="$style.contentInner">
+            <div :class="$style.text">
                 Опаньки! Слова-то закончились. Что ж, можно вас и с этим поздравить! Если хотите,
                 дайте об этом знать :)
             </div>
 
-            <div class="modal__img-wrapper">
-                <img class="modal__img" :src="img">
+            <div :class="$style.imgWrapper">
+                <img :class="$style.img" :src="img">
             </div>
         </div>
     </vue-final-modal>
@@ -31,81 +31,81 @@ const img = computed(() => new URL('/src/assets/img/Rocket.webp', import.meta.ur
 const closeModal = () => store.setIsShowWordsEnded(false);
 </script>
 
-<style lang="scss">
+<style lang="scss" module>
     .modal {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
 
-        &__content {
-            position: relative;
-            overflow: hidden;
-            width: 550px;
-            min-height: 200px;
-            max-height: 500px;
-            padding: 60px 16px 16px;
-            border-radius: 20px;
-            background-color: $gray-modal;
-            color: $white;
-            box-shadow: 0 4px 32px rgb(255 255 255 / 10%);
+    .content {
+        position: relative;
+        overflow: hidden;
+        width: 550px;
+        min-height: 200px;
+        max-height: 500px;
+        padding: 60px 16px 16px;
+        border-radius: 20px;
+        background-color: $gray-modal;
+        color: $white;
+        box-shadow: 0 4px 32px rgb(255 255 255 / 10%);
+    }
+
+    .contentInner {
+        overflow: auto;
+        height: 100%;
+        max-height: 500px;
+        padding-right: 16px;
+
+        &::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        &__content-inner {
-            overflow: auto;
-            height: 100%;
-            max-height: 500px;
-            padding-right: 16px;
-
-            &::-webkit-scrollbar {
-                width: 8px;
-                height: 8px;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                border-radius: 8px;
-                background: #fff;
-            }
-
-            &::-webkit-scrollbar-track {
-                border-radius: 8px;
-                background: $gray-modal-inner;
-            }
+        &::-webkit-scrollbar-thumb {
+            border-radius: 8px;
+            background: #fff;
         }
 
-        &__close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: $gray-modal-inner;
-            cursor: pointer;
-            user-select: none;
+        &::-webkit-scrollbar-track {
+            border-radius: 8px;
+            background: $gray-modal-inner;
+        }
+    }
 
-            &:hover {
-                background-color: $gray-modal-inner-lighten;
-            }
+    .close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: $gray-modal-inner;
+        cursor: pointer;
+        user-select: none;
 
-            &:active {
-                background-color: $gray-modal-inner-darken;
-            }
+        &:hover {
+            background-color: $gray-modal-inner-lighten;
         }
 
-        &__img-wrapper {
-            display: flex;
-            justify-content: center;
-            width: 100%;
+        &:active {
+            background-color: $gray-modal-inner-darken;
         }
+    }
 
-        &__img {
-            height: 150px;
-            margin-top: 20px;
-            border-radius: 20px;
-            object-fit: contain;
-        }
+    .imgWrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .img {
+        height: 150px;
+        margin-top: 20px;
+        border-radius: 20px;
+        object-fit: contain;
     }
 </style>

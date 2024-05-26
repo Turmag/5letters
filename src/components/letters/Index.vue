@@ -1,5 +1,5 @@
 <template>
-    <div class="letters">
+    <div :class="$style.letters">
         <Letter
             v-for="(item, index) in letters"
             :key="index"
@@ -37,7 +37,7 @@ const letters = [
 ];
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
     .letters {
         display: flex;
         gap: 5px;

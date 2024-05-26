@@ -1,6 +1,5 @@
 <template>
     <div
-        class="letter"
         :class="letterClass"
         :style="`animation-delay: ${index / 5}s, ${index / 5 + 1.6}s`"
     >
@@ -9,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useCssModule } from 'vue';
 import { Letter } from '@/services/types';
 
 interface Props {
@@ -20,15 +19,17 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), { isAnimate: false });
 
+const $style = useCssModule();
 const letterClass = computed(() => ({
-    'letter--right': props.letter?.isRight,
-    'letter--wrong': props.letter?.isWrong,
-    'letter--almost': props.letter?.isAlmost,
-    'letter--animate': props.isAnimate,
+    [$style.letter]: true,
+    [$style.letterRight]: props.letter?.isRight,
+    [$style.letterWrong]: props.letter?.isWrong,
+    [$style.letterAlmost]: props.letter?.isAlmost,
+    [$style.letterAnimate]: props.isAnimate,
 }));
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
     .letter {
         display: flex;
         align-items: center;
@@ -38,24 +39,24 @@ const letterClass = computed(() => ({
         border-radius: 5px;
         font-size: 20px;
         user-select: none;
+    }
 
-        &--right {
-            background-color: $yellow;
-            color: $black;
-        }
+    .letterRight {
+        background-color: $yellow;
+        color: $black;
+    }
 
-        &--wrong {
-            background-color: $gray;
-        }
+    .letterWrong {
+        background-color: $gray;
+    }
 
-        &--almost {
-            background-color: $white;
-            color: $black;
-        }
+    .letterAlmost {
+        background-color: $white;
+        color: $black;
+    }
 
-        &--animate {
-            animation: rotate 1s, scale 1s;
-        }
+    .letterAnimate {
+        animation: rotate 1s, scale 1s;
     }
 
     @keyframes rotate {

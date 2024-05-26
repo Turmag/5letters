@@ -1,7 +1,7 @@
 <template>
-    <div class="block" @click="clickHandle">
-        <div class="block__title">
-            <div class="block__title-text">
+    <div :class="$style.block" @click="clickHandle">
+        <div :class="$style.title">
+            <div :class="$style.text">
                 {{ text }}
             </div>
             <CarbonInformation
@@ -29,7 +29,7 @@
                 color="#ffda2f"
             />
         </div>
-        <div class="block__note">
+        <div :class="$style.note">
             {{ noteText }}
         </div>
     </div>
@@ -120,7 +120,7 @@ const clickHandle = () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style module lang="scss">
     .block {
         box-sizing: border-box;
         width: calc(50% - 10px);
@@ -139,20 +139,20 @@ const clickHandle = () => {
         &:active {
             background-color: $gray-modal-inner-darken;
         }
+    }
 
-        &__title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: $white;
-        }
+    .title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: $white;
+    }
 
-        &__title-text {
-            font-size: 18px;
-        }
+    .text {
+        font-size: 18px;
+    }
 
-        &__note {
-            color: #9a999e;
-        }
+    .note {
+        color: #9a999e;
     }
 </style>

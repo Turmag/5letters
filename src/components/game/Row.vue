@@ -1,9 +1,8 @@
 <template>
-    <div class="row">
+    <div :class="$style.row">
         <div
             v-if="isShowAdditionalBtns"
-            class="cancel"
-            :class="{ 'cancel--active': isCancelAvailable }"
+            :class="[$style.cancel, { [$style.cancelActive]: isCancelAvailable }]"
             @click="cancelLetters"
         >
             <MdiClose :color="cancelColor" width="50" height="50" />
@@ -32,8 +31,7 @@
         </template>
         <div
             v-if="isShowAdditionalBtns"
-            class="apply"
-            :class="{ 'apply--active': isActiveCheck }"
+            :class="[$style.apply, { [$style.applyActive]: isActiveCheck }]"
             @click="checkTrialLocal"
         >
             <MdiCheck :color="checkColor" width="50" height="50" />
@@ -65,7 +63,7 @@ const store = mainStore();
 const cancelColor = '#fff';
 
 const isActiveCheck = computed(() => store.currentWord.join('').length === 5);
-const checkColor = computed(() => (isActiveCheck.value ? '#1c1c1e' : '#fff'));
+const checkColor = computed(() => isActiveCheck.value ? '#1c1c1e' : '#fff');
 const isCancelAvailable = computed(() => store.currentWord.join('').length > 0);
 const isShowAdditionalBtns = computed(() => props.isActive && !store.isWin && !store.isLost);
 
@@ -77,19 +75,22 @@ const focusField = (index: number) => {
 };
 const prev = (index: number) => focusField(index);
 const next = (index: number) => focusField(index);
+
 const enterFocus = () => {
     emit('enterFocus');
 };
+
 const checkTrialLocal = async () => {
     if (isActiveCheck.value) {
         store.checkTrialAction();
         if ((store.isLost || store.isWin) && store.searchWords.length) {
             const timeout = store.isWin ? 1600 : 0;
-            const btn = document.querySelector('.game__btn') as HTMLElement;
             await setTimeout(() => {
+                const btn = document.querySelector('[btn]') as HTMLElement;
                 btn.scrollIntoView({ behavior: 'smooth' });
             }, timeout);
             setTimeout(() => {
+                const btn = document.querySelector('[btn]') as HTMLElement;
                 btn.focus();
             }, 400);
         } else if ((store.isLost || store.isWin) && !store.searchWords.length) {
@@ -102,16 +103,18 @@ const checkTrialLocal = async () => {
         }
     }
 };
+
 const cancelLetters = () => {
     store.resetWord();
     const fields = field.value;
     fields.forEach((el: typeof Field) => el.clearLetter());
     enterFocus();
 };
+
 defineExpose({ focusField });
 </script>
 
-<style lang="scss" scoped>
+<style module lang="scss">
     .row {
         position: relative;
         display: flex;
@@ -132,22 +135,6 @@ defineExpose({ focusField });
         transition: 0.3s;
         transition-property: background-color border-color;
         user-select: none;
-
-        &--active {
-            border-color: $yellow;
-            background-color: $yellow;
-            cursor: pointer;
-
-            &:hover {
-                border-color: $yellow-lighten;
-                background-color: $yellow-lighten;
-            }
-
-            &:active {
-                border-color: $yellow-darken;
-                background-color: $yellow-darken;
-            }
-        }
     }
 
     .cancel {
@@ -164,21 +151,36 @@ defineExpose({ focusField });
         transition: 0.3s;
         transition-property: background-color border-color;
         user-select: none;
+    }
 
-        &--active {
-            border-color: $red;
-            background-color: $red;
-            cursor: pointer;
+    .applyActive {
+        border-color: $yellow;
+        background-color: $yellow;
+        cursor: pointer;
 
-            &:hover {
-                border-color: $red-lighten;
-                background-color: $red-lighten;
-            }
+        &:hover {
+            border-color: $yellow-lighten;
+            background-color: $yellow-lighten;
+        }
 
-            &:active {
-                border-color: $red-darken;
-                background-color: $red-darken;
-            }
+        &:active {
+            border-color: $yellow-darken;
+            background-color: $yellow-darken;
+        }
+    }
+
+    .cancelActive {
+        border-color: $red;
+        background-color: $red;
+
+        &:hover {
+            border-color: $red-lighten;
+            background-color: $red-lighten;
+        }
+
+        &:active {
+            border-color: $red-darken;
+            background-color: $red-darken;
         }
     }
 </style>

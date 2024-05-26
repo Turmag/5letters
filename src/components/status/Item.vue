@@ -1,10 +1,10 @@
 <template>
-    <div class="item-wrapper">
-        <div class="item" :class="itemClass">
-            <div class="item__inner">
+    <div :class="$style.itemWrapper">
+        <div :class="[$style.item, itemClass]">
+            <div :class="$style.inner">
                 <CarbonGift
                     v-if="item.isGift"
-                    class="item__icon"
+                    :class="$style.icon"
                     width="30"
                     height="30"
                 />
@@ -13,9 +13,9 @@
                     {{ item.step }}
                 </template>
             </div>
-            <div v-if="item.isDecor" class="item__inner-decor" />
+            <div v-if="item.isDecor" :class="$style.innerDecor" />
         </div>
-        <div class="item__name">
+        <div :class="$style.name">
             <template v-if="item.word">
                 {{ item.word }}
             </template>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useCssModule } from 'vue';
 import { PanelItem } from '@/services/types';
 
 interface Props {
@@ -41,14 +41,15 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const $style = useCssModule();
 
 const itemClass = computed(() => {
-    return { 'item--active': props.item.isActive };
+    return { [$style.active]: props.item.isActive };
 });
 </script>
 
-<style lang="scss" scoped>
-    .item-wrapper {
+<style lang="scss" module>
+    .itemWrapper {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -58,41 +59,46 @@ const itemClass = computed(() => {
     .item {
         display: flex;
         align-items: center;
+    }
 
-        &__inner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background-color: $gray-modal-inner;
-            font-size: 25px;
-            color: $gray-lighten;
-        }
+    .inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: $gray-modal-inner;
+        font-size: 25px;
+        color: $gray-lighten;
+    }
 
-        &--active &__inner {
-            background-color: $yellow;
-            color: $black;
-        }
+    .active .inner {
+        background-color: $yellow;
+        color: $black;
+    }
 
-        &__inner-decor {
-            width: 35px;
-            height: 7px;
-            background-color: $gray-modal-inner;
-        }
+    .innerDecor {
+        width: 35px;
+        height: 7px;
+        background-color: $gray-modal-inner;
+    }
 
-        &--active &__inner-decor {
-            background-color: $yellow;
-        }
+    .active .innerDecor {
+        background-color: $yellow;
+    }
 
-        &__name {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            height: 25px;
-            margin-left: 2px;
-            font-size: 20px;
-        }
+    .name {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        height: 25px;
+        margin-left: 2px;
+        font-size: 20px;
+    }
+
+    .icon {
+        cursor: pointer;
+        user-select: none;
     }
 </style>

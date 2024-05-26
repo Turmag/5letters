@@ -1,26 +1,27 @@
 <template>
-    <div class="info">
+    <div :class="$style.info">
         <CarbonGift
-            class="info__icon"
+            :class="$style.icon"
             width="30"
             height="30"
             @click="showModalPrize"
         />
         <CarbonInformation
-            class="info__icon"
+            :class="$style.icon"
             width="30"
             height="30"
             @click="showModalInfo"
         />
         <CarbonBadge
             v-if="store.isGameFinished"
-            class="info__icon"
+            :class="$style.icon"
             width="30"
             height="30"
             @click="showModalBonus"
         />
     </div>
 </template>
+
 
 <script setup lang="ts">
 import { modalStore } from '@/store/modal';
@@ -33,15 +34,15 @@ const showModalInfo = () => storeModal.setIsShowInfo(true);
 const showModalBonus = () => storeModal.setIsShowBonus(true);
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
     .info {
         display: flex;
         align-items: center;
         gap: 5px;
+    }
 
-        &__icon {
-            cursor: pointer;
-            user-select: none;
-        }
+    .icon {
+        cursor: pointer;
+        user-select: none;
     }
 </style>

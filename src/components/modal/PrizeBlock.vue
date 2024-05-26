@@ -1,23 +1,34 @@
 <template>
-    <div class="block" :class="blockClass">
-        <div class="block__text" v-html="prize.name" />
-        <div class="block__btns">
+    <div :class="blockClass">
+        <div :class="$style.text" v-html="prize.name" />
+        <div :class="$style.btns">
             <template v-if="prize.isActive">
-                <div v-if="!prize.isReceived" class="block__btn" @click="choosePrize">
+                <div
+                    v-if="!prize.isReceived"
+                    :class="$style.btn"
+                    @click="choosePrize"
+                >
                     Получить
                 </div>
-                <div v-else class="block__btn-text" v-html="prize.receivedMessage" />
+                <div
+                    v-else
+                    :class="$style.btnText"
+                    v-html="prize.receivedMessage"
+                />
             </template>
             <template v-else>
                 {{ disabledText }}
             </template>
         </div>
-        <img class="block__img" :class="{ 'block__img--round': prize.isRound }" :src="img">
+        <img
+            :class="[$style.img, prize.isRound && $style.imgRound]"
+            :src="img"
+        >
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useCssModule } from 'vue';
 import { modalStore } from '@/store/modal';
 import { declOfNum } from '@/assets/js/functions';
 import { Prize } from '@/services/types';
@@ -30,9 +41,13 @@ interface Props {
 const props = defineProps<Props>();
 
 const store = modalStore();
+const $style = useCssModule();
 const img = computed(() => new URL(`/src/assets/img/${props.prize.img}`, import.meta.url).href);
 const blockClass = computed(() => {
-    return { 'block--disabled': !props.prize.isActive };
+    return {
+        [$style.block]: true,
+        [$style.blockDisabled]: !props.prize.isActive, 
+    };
 });
 const disabledText = computed(() => {
     return `Отгадайте ещё ${props.prize.wordsToOpen} ${declOfNum(props.prize.wordsToOpen, [
@@ -46,7 +61,7 @@ const choosePrize = () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
     .block {
         position: relative;
         box-sizing: border-box;
@@ -61,62 +76,60 @@ const choosePrize = () => {
         font-size: 20px;
         flex-direction: column;
 
-        &--disabled {
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 1;
-                width: 100%;
-                height: 100%;
-                background-color: rgb(95 95 95 / 70%);
-            }
-        }
-
-        &__btns {
-            display: flex;
-            gap: 20px;
-            font-size: 16px;
-        }
-
-        &__btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px 10px;
-            border-radius: 25px;
-            background-color: $yellow;
-            color: $black;
-            cursor: pointer;
-            user-select: none;
-
-            &:hover {
-                background-color: $yellow-lighten;
-            }
-
-            &:active {
-                background-color: $yellow-darken;
-            }
-        }
-
-        &__btn-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: $white;
-        }
-
-        &__img {
+        &.blockDisabled::before {
+            content: '';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            height: 130px;
-            object-fit: contain;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(95 95 95 / 70%);
+        }
+    }
 
-            &--round {
-                border-radius: 50%;
-            }
+    .btns {
+        display: flex;
+        gap: 20px;
+        font-size: 16px;
+    }
+
+    .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 10px;
+        border-radius: 25px;
+        background-color: $yellow;
+        color: $black;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            background-color: $yellow-lighten;
+        }
+
+        &:active {
+            background-color: $yellow-darken;
+        }
+    }
+
+    .btnText {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+    }
+
+    .img {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        height: 130px;
+        object-fit: contain;
+
+        &.imgRound {
+            border-radius: 50%;
         }
     }
 </style>
