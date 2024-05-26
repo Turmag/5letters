@@ -38,7 +38,7 @@ import { computed, ref } from 'vue';
 import { mainStore } from '@/store/main';
 import { declOfNum } from '@/assets/js/functions';
 
-const row = ref(null);
+const row = ref();
 const store = mainStore();
 
 const lostLetters = computed(() => {

@@ -2,12 +2,13 @@
     <div class="item-wrapper">
         <div class="item" :class="itemClass">
             <div class="item__inner">
-                <template v-if="item.isGift">
-                    <IconGift class="item__icon" width="30" height="30" />
-                </template>
-                <template v-else-if="item.isActive">
-                    <IconCheck width="30" height="30" />
-                </template>
+                <CarbonGift
+                    v-if="item.isGift"
+                    class="item__icon"
+                    width="30"
+                    height="30"
+                />
+                <MdiCheck v-else-if="item.isActive" width="30" height="30" />
                 <template v-else>
                     {{ item.step }}
                 </template>
@@ -19,7 +20,7 @@
                 {{ item.word }}
             </template>
             <template v-else>
-                <IconCircle
+                <CarbonCircleSolid
                     v-for="i in 5"
                     :key="i"
                     width="10"
@@ -32,9 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import IconGift from '~icons/carbon/gift';
-import IconCircle from '~icons/carbon/circle-solid';
-import IconCheck from '~icons/mdi/check';
 import { computed } from 'vue';
 import { PanelItem } from '@/services/types';
 

@@ -6,7 +6,7 @@
             :class="{ 'cancel--active': isCancelAvailable }"
             @click="cancelLetters"
         >
-            <IconClose :color="cancelColor" width="50" height="50" />
+            <MdiClose :color="cancelColor" width="50" height="50" />
         </div>
         <template v-if="letters.length">
             <Field
@@ -36,15 +36,13 @@
             :class="{ 'apply--active': isActiveCheck }"
             @click="checkTrialLocal"
         >
-            <IconCheck :color="checkColor" width="50" height="50" />
+            <MdiCheck :color="checkColor" width="50" height="50" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import Field from '@/components/game/Field.vue';
-import IconCheck from '~icons/mdi/check';
-import IconClose from '~icons/mdi/close';
 import { computed, ref } from 'vue';
 import { mainStore } from '@/store/main';
 import { Letter } from '@/services/types';
@@ -62,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits(['enterFocus']);
-const field = ref(null);
+const field = ref();
 const store = mainStore();
 const cancelColor = '#fff';
 
@@ -71,14 +69,14 @@ const checkColor = computed(() => (isActiveCheck.value ? '#1c1c1e' : '#fff'));
 const isCancelAvailable = computed(() => store.currentWord.join('').length > 0);
 const isShowAdditionalBtns = computed(() => props.isActive && !store.isWin && !store.isLost);
 
-const focusField = index => {
+const focusField = (index: number) => {
     const fields = field.value;
     if (fields[index]) {
         fields[index].focusInput();
     }
 };
-const prev = index => focusField(index);
-const next = index => focusField(index);
+const prev = (index: number) => focusField(index);
+const next = (index: number) => focusField(index);
 const enterFocus = () => {
     emit('enterFocus');
 };
@@ -87,11 +85,12 @@ const checkTrialLocal = async () => {
         store.checkTrialAction();
         if ((store.isLost || store.isWin) && store.searchWords.length) {
             const timeout = store.isWin ? 1600 : 0;
+            const btn = document.querySelector('.game__btn') as HTMLElement;
             await setTimeout(() => {
-                document.querySelector('.game__btn').scrollIntoView({ behavior: 'smooth' });
+                btn.scrollIntoView({ behavior: 'smooth' });
             }, timeout);
             setTimeout(() => {
-                document.querySelector('.game__btn').focus();
+                btn.focus();
             }, 400);
         } else if ((store.isLost || store.isWin) && !store.searchWords.length) {
             const timeout = store.isWin ? 1600 : 0;
@@ -106,7 +105,7 @@ const checkTrialLocal = async () => {
 const cancelLetters = () => {
     store.resetWord();
     const fields = field.value;
-    fields.forEach(el => el.clearLetter());
+    fields.forEach((el: typeof Field) => el.clearLetter());
     enterFocus();
 };
 defineExpose({ focusField });

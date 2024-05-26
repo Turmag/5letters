@@ -1,7 +1,7 @@
 <template>
     <vue-final-modal v-model="store.isShowPrize" classes="modal" content-class="modal__content">
         <div class="modal__close" @click="closeModal">
-            <IconClose color="#fff" width="20" height="20" />
+            <MdiClose color="#fff" width="20" height="20" />
         </div>
         <div class="modal__content-inner">
             <div class="modal__title">
@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import IconClose from '~icons/mdi/close';
 import Block from '@/components/modal/PrizeBlock.vue';
 import { modalStore } from '@/store/modal';
 

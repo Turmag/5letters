@@ -4,25 +4,25 @@
             <div class="block__title-text">
                 {{ text }}
             </div>
-            <IconInfo
+            <CarbonInformation
                 v-if="icon === 'info'"
                 width="20"
                 height="20"
                 color="#ffda2f"
             />
-            <IconLink
+            <CarbonLink
                 v-else-if="icon === 'link'"
                 width="20"
                 height="20"
                 color="#ffda2f"
             />
-            <IconSave
+            <CarbonSave
                 v-else-if="icon === 'save'"
                 width="20"
                 height="20"
                 color="#ffda2f"
             />
-            <IconReset
+            <CarbonReset
                 v-else-if="icon === 'reset'"
                 width="20"
                 height="20"
@@ -36,10 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import IconInfo from '~icons/carbon/information';
-import IconLink from '~icons/carbon/link';
-import IconSave from '~icons/carbon/save';
-import IconReset from '~icons/carbon/reset';
 import { ref, computed } from 'vue';
 import { mainStore } from '@/store/main';
 import { useLocalStorage } from '@vueuse/core';
@@ -65,8 +61,9 @@ const isSaved = ref(false);
 const isReseted = ref(false);
 const isResetDone = ref(false);
 const remainSeconds = ref(0);
-let resetInterval = null;
-let resetTimeout = null;
+
+let resetInterval: ReturnType<typeof setInterval>;
+let resetTimeout: ReturnType<typeof setTimeout>;
 
 const noteText = computed(() =>
     isCopied.value
@@ -108,7 +105,7 @@ const clickHandle = () => {
         isReseted.value = false;
         isResetDone.value = true;
         setTimeout(() => (isResetDone.value = false), 1500);
-        const fiveLettersData = useLocalStorage('5lettersData');
+        const fiveLettersData = useLocalStorage('5lettersData', '{}');
         fiveLettersData.value = JSON.stringify({});
     }
     if (props.isReset && !isReseted.value && !isResetDone.value) {

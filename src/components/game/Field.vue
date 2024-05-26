@@ -38,13 +38,13 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['prev', 'next', 'enterFocus']);
 
 const store = mainStore();
-const input = ref(null);
+const input = ref();
 const letterValue = ref('');
-let isPossibleNext = '';
-let isPossiblePrev = '';
-let isPossiblePrevBack = '';
-let isPossibleNextArrow = '';
-let isKeyDown = '';
+let isPossibleNext = false;
+let isPossiblePrev = false;
+let isPossiblePrevBack = false;
+let isPossibleNextArrow = false;
+let isKeyDown = false;
 
 const isActiveCheck = computed(() => store.currentWord.join('').length === 5);
 const letterClass = computed(() => ({
@@ -60,11 +60,12 @@ const determineKeyupAction = async (e: KeyboardEvent) => {
             store.checkTrialAction();
             if ((store.isLost || store.isWin) && store.searchWords.length) {
                 const timeout = store.isWin ? 1600 : 0;
+                const btn = document.querySelector('.game__btn') as HTMLElement;
                 await setTimeout(() => {
-                    document.querySelector('.game__btn').scrollIntoView({ behavior: 'smooth' });
+                    btn.scrollIntoView({ behavior: 'smooth' });
                 }, timeout);
                 setTimeout(() => {
-                    document.querySelector('.game__btn').focus();
+                    btn.focus();
                 }, 400);
             } else if ((store.isLost || store.isWin) && !store.searchWords.length) {
                 const timeout = store.isWin ? 1600 : 0;
@@ -84,11 +85,11 @@ const determineKeyupAction = async (e: KeyboardEvent) => {
     });
     if ((e.key === 'Backspace' && isPossiblePrevBack) || (e.key === 'ArrowLeft' && isPossiblePrev)) {
         prev();
-    } else if (e.keyCode === 'ArrowRight' && isPossibleNextArrow) {
+    } else if (e.key === 'ArrowRight' && isPossibleNextArrow) {
         next();
     }
 
-    isPossibleNext = letterValue.value.length && isPossibleNext;
+    isPossibleNext = Boolean(letterValue.value.length && isPossibleNext);
 
     if (
         (e.key === ' ' ||
@@ -112,10 +113,11 @@ const determineKeyupAction = async (e: KeyboardEvent) => {
 const determineNextPossibility = (e: KeyboardEvent) => {
     if (!isKeyDown) {
         isKeyDown = true;
-        isPossibleNext = !e.target.selectionStart;
-        isPossiblePrev = !e.target.selectionStart;
-        isPossiblePrevBack = !e.target.selectionStart;
-        isPossibleNextArrow = !letterValue.value.length || e.target.selectionStart;
+        const target = e.target as HTMLInputElement;
+        isPossibleNext = Boolean(!target.selectionStart);
+        isPossiblePrev = Boolean(!target.selectionStart);
+        isPossiblePrevBack = Boolean(!target.selectionStart);
+        isPossibleNextArrow = Boolean(!letterValue.value.length || target.selectionStart);
     }
 };
 const prev = () => emit('prev', props.index - 1);

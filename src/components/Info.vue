@@ -1,18 +1,18 @@
 <template>
     <div class="info">
-        <IconGift
+        <CarbonGift
             class="info__icon"
             width="30"
             height="30"
             @click="showModalPrize"
         />
-        <IconInfo
+        <CarbonInformation
             class="info__icon"
             width="30"
             height="30"
             @click="showModalInfo"
         />
-        <IconBonus
+        <CarbonBadge
             v-if="store.isGameFinished"
             class="info__icon"
             width="30"
@@ -23,15 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import IconInfo from '~icons/carbon/information';
-import IconGift from '~icons/carbon/gift';
-import IconBonus from '~icons/carbon/badge';
 import { modalStore } from '@/store/modal';
+import { mainStore } from '@/store/main';
 
-const store = modalStore();
-const showModalPrize = () => store.setIsShowPrize(true);
-const showModalInfo = () => store.setIsShowInfo(true);
-const showModalBonus = () => store.setIsShowBonus(true);
+const store = mainStore();
+const storeModal = modalStore();
+const showModalPrize = () => storeModal.setIsShowPrize(true);
+const showModalInfo = () => storeModal.setIsShowInfo(true);
+const showModalBonus = () => storeModal.setIsShowBonus(true);
 </script>
 
 <style lang="scss" scoped>

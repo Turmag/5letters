@@ -16,6 +16,7 @@
         "pinia": "^2.0.23",
         "sass": "^1.55.0",
         "unplugin-icons": "^0.14.13",
+        "unplugin-vue-components": "^0.27.0",
         "vue": "^3.4.27",
         "vue-final-modal": "^3.4.4"
     },

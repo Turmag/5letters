@@ -5,7 +5,7 @@
                 <div class="bonus__sphere" />
                 <div class="bonus__sphere" :class="sphereClass" @click="hideModalBonus">
                     <transition name="fade">
-                        <IconClose
+                        <MdiClose
                             v-if="!store.isBonusAnimate"
                             color="#1c1c1e"
                             width="40"
@@ -36,12 +36,11 @@
 </template>
 
 <script setup lang="ts">
-import IconClose from '~icons/mdi/close';
 import { computed, watch } from 'vue';
 import { modalStore } from '@/store/modal';
 
 const store = modalStore();
-let timeout = null;
+let timeout: null | ReturnType<typeof setTimeout> = null;
 
 const bonusClass = computed(() => ({ 'bonus--animate': store.isBonusAnimate }));
 const sphereClass = computed(() => ({ 'bonus__sphere--close': !store.isBonusAnimate }));
@@ -62,8 +61,8 @@ watch(
                 timeout = setTimeout(() => store.setIsBonusAnimate(false), 11000);
             }
         } else {
-            document.body.style.overflow = null;
-            document.body.style.paddingRight = null;
+            document.body.style.overflow = 'none';
+            document.body.style.paddingRight = '0';
         }
     },
 );

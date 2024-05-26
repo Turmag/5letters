@@ -24,14 +24,16 @@ import words from '@/words.json';
 import { mainStore } from '@/store/main';
 import { modalStore } from '@/store/modal';
 import { useLocalStorage } from '@vueuse/core';
+import { FiveLettersData } from '@/services/types';
 
-let fiveLettersData = useLocalStorage('5lettersData').value;
+const fiveLettersDataStorage = useLocalStorage('5lettersData', '{}').value;
 const store = mainStore();
 const storeModal = modalStore();
 store.setSearchWords(words);
 
-if (fiveLettersData) fiveLettersData = JSON.parse(fiveLettersData);
-if (fiveLettersData && fiveLettersData.words) {
+let fiveLettersData = {} as FiveLettersData;
+if (fiveLettersDataStorage) fiveLettersData = JSON.parse(fiveLettersDataStorage);
+if (fiveLettersData.words) {
     const winsCount = fiveLettersData.words.length;
     store.setWinsCount(winsCount);
     store.setPanelItems({
@@ -43,7 +45,7 @@ if (fiveLettersData && fiveLettersData.words) {
     store.setGuessedWords(fiveLettersData.words);
     store.excludeSearchWords(fiveLettersData.words);
     store.setIsGameFinished(fiveLettersData.isGameFinished);
-    if (fiveLettersData.isGameFinished) store.setIsBonusAnimate(false);
+    if (fiveLettersData.isGameFinished) storeModal.setIsBonusAnimate(false);
 }
 
 store.setSearchWord();

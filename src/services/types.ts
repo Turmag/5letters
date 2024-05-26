@@ -1,5 +1,5 @@
 export interface Letter {
-    letter: string;
+    letter?: string;
     isRight?: boolean;
     isWrong?: boolean;
     isAlmost?: boolean;
@@ -7,11 +7,12 @@ export interface Letter {
 
 export interface Prize {
     name: string;
-    isActive: boolean;
-    isReceived: boolean;
     receivedMessage: string;
     img: string;
     wordsToOpen: number;
+    isActive: boolean;
+    isReceived: boolean;
+    isRound?: boolean;
 }
 
 export interface PanelItem {
@@ -26,4 +27,10 @@ export interface Trial {
     isActive?: boolean;
     isAnimate?: boolean;
     letters?: Letter[];
+}
+
+export interface FiveLettersData {
+    words: string[];
+    receivedPrizes: boolean[];
+    isGameFinished: boolean;
 }

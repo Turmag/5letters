@@ -1,7 +1,7 @@
 <template>
     <vue-final-modal v-model="store.isShowInfo" classes="modal" content-class="modal__content">
         <div class="modal__close" @click="closeModal">
-            <IconClose color="#fff" width="20" height="20" />
+            <MdiClose color="#fff" width="20" height="20" />
         </div>
         <div v-if="isRules" class="modal__back" @click="setIsRules(false)">
             &lt;
@@ -124,7 +124,6 @@
 </template>
 
 <script setup lang="ts">
-import IconClose from '~icons/mdi/close';
 import Block from '@/components/modal/InfoBlock.vue';
 import Letter from '@/components/letters/Letter.vue';
 import { ref } from 'vue';
@@ -200,7 +199,7 @@ const lettersThird = [
 ];
 
 const closeModal = () => store.setIsShowInfo(false);
-const setIsRules = val => isRules.value = val;
+const setIsRules = (value: boolean) => isRules.value = value;
 </script>
 
 <style lang="scss">
