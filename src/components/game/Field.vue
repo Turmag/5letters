@@ -1,127 +1,141 @@
 <template>
     <input
         ref="input"
+        v-model="letterValue"
         class="field"
         :class="letterClass"
         :style="`animation-delay: ${index / 5}s`"
         maxlength="1"
+        :disabled="!isActive"
         @keyup="determineKeyupAction"
         @keydown="determineNextPossibility"
-        v-model="letterValue"
-        :disabled="!isActive"
-    />
+    >
 </template>
 
-<script setup>
-    import { computed, watch, ref } from 'vue';
-    import { useStore } from 'vuex';
-    const props = defineProps({
-        index: { type: Number, default: 0 },
-        isActive: { type: Boolean, default: false },
-        letter: { type: Object, default: () => ({}) },
-        isAnimate: { type: Boolean, default: false },
-    });
-    const emit = defineEmits(['prev', 'next', 'enterFocus']);
-    const store = useStore();
-    const state = store.state.main;
-    const input = ref(null);
-    let currentLetter = ref('');
-    let isPossibleNext = '';
-    let isPossiblePrev = '';
-    let isPossiblePrevBack = '';
-    let isPossibleNextArrow = '';
-    let isKeyDown = '';
+<script setup lang="ts">
+import {
+    ref,
+    computed,
+    watch,
+    onMounted,
+} from 'vue';
+import { mainStore } from '@/store/main';
+import { Letter } from '@/services/types';
 
-    watch(currentLetter, val => {
-        currentLetter.value = val.replace(/[^а-яА-Я]/g, '').toUpperCase();
-        if (currentLetter.value === '') {
-            isPossibleNext = false;
-        }
-    });
+interface Props {
+    index: number;
+    isActive?: boolean;
+    isAnimate?: boolean;
+    letter?: Letter;
+}
 
-    const letterValue = computed({
-        get() {
-            return props.letter?.letter ? props.letter.letter : currentLetter.value;
-        },
-        set(val) {
-            currentLetter.value = val;
-        },
-    });
-    const isActiveCheck = computed(() => state.currentWord.join('').length === 5);
-    const letterClass = computed(() => ({
-        'field--right': props.letter?.isRight,
-        'field--wrong': props.letter?.isWrong,
-        'field--almost': props.letter?.isAlmost,
-        'field--animate': props.isAnimate,
-    }));
+const props = withDefaults(defineProps<Props>(), {
+    isActive: false,
+    isAnimate: false,
+    letter: () => ({}),
+});
 
-    const determineKeyupAction = async e => {
-        if (e.keyCode === 13) {
-            if (isActiveCheck.value) {
-                store.dispatch('checkTrialAction');
-                if ((state.isLost || state.isWin) && state.searchWords.length) {
-                    const timeout = state.isWin ? 1600 : 0;
-                    await setTimeout(() => {
-                        document.querySelector('.game__btn').scrollIntoView({ behavior: 'smooth' });
-                    }, timeout);
-                    setTimeout(() => {
-                        document.querySelector('.game__btn').focus();
-                    }, 400);
-                } else if ((state.isLost || state.isWin) && !state.searchWords.length) {
-                    const timeout = state.isWin ? 1600 : 0;
-                    await setTimeout(() => {
-                        store.dispatch('setWordsEnded');
-                    }, timeout);
-                } else {
-                    emit('enterFocus');
-                }
+const emit = defineEmits(['prev', 'next', 'enterFocus']);
+
+const store = mainStore();
+const input = ref(null);
+const letterValue = ref('');
+let isPossibleNext = '';
+let isPossiblePrev = '';
+let isPossiblePrevBack = '';
+let isPossibleNextArrow = '';
+let isKeyDown = '';
+
+const isActiveCheck = computed(() => store.currentWord.join('').length === 5);
+const letterClass = computed(() => ({
+    'field--right': props.letter?.isRight,
+    'field--wrong': props.letter?.isWrong,
+    'field--almost': props.letter?.isAlmost,
+    'field--animate': props.isAnimate,
+}));
+
+const determineKeyupAction = async (e: KeyboardEvent) => {
+    if (e.keyCode === 13) {
+        if (isActiveCheck.value) {
+            store.checkTrialAction();
+            if ((store.isLost || store.isWin) && store.searchWords.length) {
+                const timeout = store.isWin ? 1600 : 0;
+                await setTimeout(() => {
+                    document.querySelector('.game__btn').scrollIntoView({ behavior: 'smooth' });
+                }, timeout);
+                setTimeout(() => {
+                    document.querySelector('.game__btn').focus();
+                }, 400);
+            } else if ((store.isLost || store.isWin) && !store.searchWords.length) {
+                const timeout = store.isWin ? 1600 : 0;
+                await setTimeout(() => {
+                    store.setWordsEnded();
+                }, timeout);
+            } else {
+                emit('enterFocus');
             }
-            return;
         }
-        store.commit('setLetterInWord', {
-            index: props.index,
-            letter: currentLetter.value,
-        });
-        if ((e.keyCode === 8 && isPossiblePrevBack) || (e.keyCode === 37 && isPossiblePrev)) {
-            prev();
-        } else if (e.keyCode === 39 && isPossibleNextArrow) {
-            next();
-        }
+        return;
+    }
 
-        isPossibleNext = currentLetter.value.length && isPossibleNext;
+    store.setLetterInWord({
+        index: props.index,
+        letter: letterValue.value,
+    });
+    if ((e.key === 'Backspace' && isPossiblePrevBack) || (e.key === 'ArrowLeft' && isPossiblePrev)) {
+        prev();
+    } else if (e.keyCode === 'ArrowRight' && isPossibleNextArrow) {
+        next();
+    }
 
-        if (
-            (e.keyCode === 32 ||
-                e.keyCode === 186 ||
-                e.keyCode === 188 ||
-                e.keyCode === 190 ||
-                e.keyCode === 191 ||
-                e.keyCode === 219 ||
-                e.keyCode === 220 ||
-                e.keyCode === 221 ||
-                (e.keyCode >= 65 && e.keyCode <= 90) ||
-                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                (e.keyCode >= 96 && e.keyCode <= 105)) &&
-            isPossibleNext
-        ) {
-            next();
-        }
-        isKeyDown = false;
-    };
-    const determineNextPossibility = e => {
-        if (!isKeyDown) {
-            isKeyDown = true;
-            isPossibleNext = !e.target.selectionStart;
-            isPossiblePrev = !e.target.selectionStart;
-            isPossiblePrevBack = !e.target.selectionStart;
-            isPossibleNextArrow = !currentLetter.value.length || e.target.selectionStart;
-        }
-    };
-    const prev = () => emit('prev', props.index - 1);
-    const next = () => emit('next', props.index + 1);
-    const focusInput = () => input.value.focus();
-    const clearLetter = () => (currentLetter.value = '');
-    defineExpose({ focusInput, clearLetter });
+    isPossibleNext = letterValue.value.length && isPossibleNext;
+
+    if (
+        (e.key === ' ' ||
+            e.keyCode === 186 ||
+            e.keyCode === 188 ||
+            e.keyCode === 190 ||
+            e.keyCode === 191 ||
+            e.keyCode === 219 ||
+            e.keyCode === 220 ||
+            e.keyCode === 221 ||
+            (e.keyCode >= 65 && e.keyCode <= 90) ||
+            (e.keyCode >= 48 && e.keyCode <= 57) ||
+            (e.keyCode >= 96 && e.keyCode <= 105)) &&
+        isPossibleNext
+    ) {
+        next();
+    }
+    isKeyDown = false;
+};
+
+const determineNextPossibility = (e: KeyboardEvent) => {
+    if (!isKeyDown) {
+        isKeyDown = true;
+        isPossibleNext = !e.target.selectionStart;
+        isPossiblePrev = !e.target.selectionStart;
+        isPossiblePrevBack = !e.target.selectionStart;
+        isPossibleNextArrow = !letterValue.value.length || e.target.selectionStart;
+    }
+};
+const prev = () => emit('prev', props.index - 1);
+const next = () => emit('next', props.index + 1);
+const focusInput = () => input.value.focus();
+const clearLetter = () => letterValue.value = '';
+
+watch(letterValue, (value: string) => {
+    value = value.replace(/[^а-яА-Я]/g, '').toUpperCase();
+    if(letterValue.value !== value) letterValue.value = value;
+});
+
+onMounted(() => {
+    if (props.letter?.letter) letterValue.value = props.letter.letter;
+});
+
+defineExpose({
+    focusInput,
+    clearLetter, 
+});
 </script>
 
 <style lang="scss" scoped>
@@ -130,27 +144,27 @@
         height: 100px;
         border-radius: 5px;
         border: 1px solid $yellow;
-        font-size: 70px;
-        text-align: center;
-        color: $white;
-        outline: 0;
         background-color: transparent;
+        outline: 0;
+        text-align: center;
+        font-size: 70px;
+        color: $white;
 
         &--right {
-            color: $black;
-            background-color: $yellow;
             border-color: $yellow;
+            background-color: $yellow;
+            color: $black;
         }
 
         &--wrong {
-            background-color: $gray;
             border-color: $gray;
+            background-color: $gray;
         }
 
         &--almost {
-            color: $black;
-            background-color: $white;
             border-color: $white;
+            background-color: $white;
+            color: $black;
         }
 
         &--animate {

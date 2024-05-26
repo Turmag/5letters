@@ -1,9 +1,19 @@
 <template>
     <div class="info">
-        <IconGift class="info__icon" width="30" height="30" @click="showModalPrize" />
-        <IconInfo class="info__icon" width="30" height="30" @click="showModalInfo" />
+        <IconGift
+            class="info__icon"
+            width="30"
+            height="30"
+            @click="showModalPrize"
+        />
+        <IconInfo
+            class="info__icon"
+            width="30"
+            height="30"
+            @click="showModalInfo"
+        />
         <IconBonus
-            v-if="stateMain.isGameFinished"
+            v-if="store.isGameFinished"
             class="info__icon"
             width="30"
             height="30"
@@ -12,16 +22,16 @@
     </div>
 </template>
 
-<script setup>
-    import IconInfo from '~icons/carbon/information';
-    import IconGift from '~icons/carbon/gift';
-    import IconBonus from '~icons/carbon/badge';
-    import { useStore } from 'vuex';
-    const store = useStore();
-    const stateMain = store.state.main;
-    const showModalPrize = () => store.commit('setIsShowPrize', true);
-    const showModalInfo = () => store.commit('setIsShowInfo', true);
-    const showModalBonus = () => store.commit('setIsShowBonus', true);
+<script setup lang="ts">
+import IconInfo from '~icons/carbon/information';
+import IconGift from '~icons/carbon/gift';
+import IconBonus from '~icons/carbon/badge';
+import { modalStore } from '@/store/modal';
+
+const store = modalStore();
+const showModalPrize = () => store.setIsShowPrize(true);
+const showModalInfo = () => store.setIsShowInfo(true);
+const showModalBonus = () => store.setIsShowBonus(true);
 </script>
 
 <style lang="scss" scoped>

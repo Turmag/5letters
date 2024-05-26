@@ -1,21 +1,23 @@
 <template>
     <transition name="fade">
-        <div v-if="state.isShowBonus" class="bonus-wrapper">
+        <div v-if="store.isShowBonus" class="bonus-wrapper">
             <div class="bonus" :class="bonusClass">
-                <div class="bonus__sphere"></div>
+                <div class="bonus__sphere" />
                 <div class="bonus__sphere" :class="sphereClass" @click="hideModalBonus">
                     <transition name="fade">
                         <IconClose
-                            v-if="!state.isBonusAnimate"
+                            v-if="!store.isBonusAnimate"
                             color="#1c1c1e"
                             width="40"
                             height="40"
                         />
                     </transition>
                 </div>
-                <div class="bonus__sphere"></div>
-                <div class="bonus__sphere"></div>
-                <div class="bonus__title">Поздравляю! Игра пройдена!</div>
+                <div class="bonus__sphere" />
+                <div class="bonus__sphere" />
+                <div class="bonus__title">
+                    Поздравляю! Игра пройдена!
+                </div>
                 <div class="bonus__text">
                     Не забывайте о том, что всегда есть возможность получить замечательные призы
                     после угадывания слов.
@@ -24,55 +26,51 @@
                     Ах, да, ещё кое-что. Вы можете также играть и дальше, угадывая оставшиеся слова.
                     Кстати, вот вам ещё один приз!
                 </div>
-                <div class="bonus__prize">42</div>
+                <div class="bonus__prize">
+                    42
+                </div>
             </div>
-            <div class="bonus-wrapper__overlay" @click="hideModalBonus"></div>
+            <div class="bonus-wrapper__overlay" @click="hideModalBonus" />
         </div>
     </transition>
 </template>
 
-<script setup>
-    import IconClose from '~icons/mdi/close';
-    import { computed, watch } from 'vue';
-    import { useStore } from 'vuex';
-    const store = useStore();
-    const state = store.state.modal;
-    let timeout = null;
+<script setup lang="ts">
+import IconClose from '~icons/mdi/close';
+import { computed, watch } from 'vue';
+import { modalStore } from '@/store/modal';
 
-    const bonusClass = computed(() => ({
-        'bonus--animate': state.isBonusAnimate,
-    }));
-    const sphereClass = computed(() => ({
-        'bonus__sphere--close': !state.isBonusAnimate,
-    }));
+const store = modalStore();
+let timeout = null;
 
-    const hideModalBonus = () => {
-        if (!state.isBonusAnimate) {
-            store.commit('setIsShowBonus', false);
-        }
-    };
+const bonusClass = computed(() => ({ 'bonus--animate': store.isBonusAnimate }));
+const sphereClass = computed(() => ({ 'bonus__sphere--close': !store.isBonusAnimate }));
 
-    watch(
-        () => state.isShowBonus,
-        val => {
-            if (val) {
-                document.body.style.overflow = 'hidden';
-                document.body.style.paddingRight = '17px';
-                if (state.isBonusAnimate && !timeout) {
-                    timeout = setTimeout(() => store.commit('setIsBonusAnimate', false), 11000);
-                }
-            } else {
-                document.body.style.overflow = null;
-                document.body.style.paddingRight = null;
+const hideModalBonus = () => {
+    if (!store.isBonusAnimate) {
+        store.setIsShowBonus(false);
+    }
+};
+
+watch(
+    () => store.isShowBonus,
+    val => {
+        if (val) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '17px';
+            if (store.isBonusAnimate && !timeout) {
+                timeout = setTimeout(() => store.setIsBonusAnimate(false), 11000);
             }
+        } else {
+            document.body.style.overflow = null;
+            document.body.style.paddingRight = null;
         }
-    );
+    },
+);
 
-    document.onkeydown = e => {
-        if (e.keyCode === 27) {
-            hideModalBonus();
-        }
-    };
+document.onkeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') hideModalBonus();
+};
 </script>
 
 <style lang="scss" scoped>
@@ -81,8 +79,8 @@
         top: 0;
         left: 0;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         width: 100%;
         height: 100%;
 
@@ -92,19 +90,19 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgb(0 0 0 / 50%);
         }
     }
 
     .bonus {
         position: relative;
+        z-index: 1;
+        box-sizing: border-box;
         width: 500px;
         height: 500px;
         padding: 20px;
         background-color: $gray-modal;
         box-shadow: 0 4px 32px rgb(255 255 255 / 10%);
-        box-sizing: border-box;
-        z-index: 1;
 
         &__title {
             text-align: center;
@@ -139,10 +137,10 @@
         &__prize {
             margin-top: 20px;
             text-align: center;
-            color: $yellow;
             font-size: 120px;
-            font-weight: bold;
             line-height: 200px;
+            color: $yellow;
+            font-weight: bold;
             user-select: none;
         }
 
@@ -156,17 +154,17 @@
 
         &__sphere {
             position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50px;
-            height: 50px;
             top: 0;
             left: 0;
-            transform: translate3d(-50%, -50%, 0);
-            background-color: $yellow;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            background-color: $yellow;
+            transform: translate3d(-50%, -50%, 0);
+            box-shadow: 5px 5px 15px rgb(0 0 0 / 50%);
 
             &:nth-child(2) {
                 top: 0;
@@ -186,6 +184,7 @@
             &--close {
                 cursor: pointer;
                 user-select: none;
+
                 &:hover {
                     background-color: $yellow-lighten;
                 }
@@ -199,8 +198,8 @@
         &--animate &__sphere {
             top: 0;
             left: 0;
-            animation-fill-mode: forwards;
             animation-duration: 4s;
+            animation-fill-mode: forwards;
             animation-iteration-count: 1;
             animation-timing-function: ease-in-out;
 
@@ -208,14 +207,17 @@
                 animation-name: bonus-animate-1;
                 animation-delay: 0.4s;
             }
+
             &:nth-child(2) {
                 animation-name: bonus-animate-2;
                 animation-delay: 0.3s;
             }
+
             &:nth-child(3) {
                 animation-name: bonus-animate-3;
                 animation-delay: 0.2s;
             }
+
             &:nth-child(4) {
                 animation-name: bonus-animate-4;
                 animation-delay: 0.1s;
@@ -228,10 +230,12 @@
             top: 0;
             left: 0;
         }
+
         25% {
             top: 0;
             left: 100%;
         }
+
         100% {
             top: 0;
             left: 100%;
@@ -243,14 +247,17 @@
             top: 0;
             left: 0;
         }
+
         25% {
             top: 0;
             left: 100%;
         }
+
         50% {
             top: 100%;
             left: 100%;
         }
+
         100% {
             top: 100%;
             left: 100%;
@@ -262,18 +269,22 @@
             top: 0;
             left: 0;
         }
+
         25% {
             top: 0;
             left: 100%;
         }
+
         50% {
             top: 100%;
             left: 100%;
         }
+
         75% {
             top: 100%;
             left: 0;
         }
+
         100% {
             top: 100%;
             left: 0;
@@ -285,18 +296,22 @@
             top: 0;
             left: 0;
         }
+
         25% {
             top: 0;
             left: 100%;
         }
+
         50% {
             top: 100%;
             left: 100%;
         }
+
         75% {
             top: 100%;
             left: 0;
         }
+
         100% {
             top: 0;
             left: 0;
@@ -307,6 +322,7 @@
         from {
             opacity: 0;
         }
+
         to {
             opacity: 1;
         }

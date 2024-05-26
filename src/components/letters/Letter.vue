@@ -8,20 +8,24 @@
     </div>
 </template>
 
-<script setup>
-    import { computed } from 'vue';
-    const props = defineProps({
-        letter: { type: Object, default: () => ({}) },
-        index: { type: Number, default: 0 },
-        isAnimate: { type: Boolean, default: false },
-    });
+<script setup lang="ts">
+import { computed } from 'vue';
+import { Letter } from '@/services/types';
 
-    const letterClass = computed(() => ({
-        'letter--right': props.letter?.isRight,
-        'letter--wrong': props.letter?.isWrong,
-        'letter--almost': props.letter?.isAlmost,
-        'letter--animate': props.isAnimate,
-    }));
+interface Props {
+    letter: Letter;
+    index: number;
+    isAnimate?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), { isAnimate: false });
+
+const letterClass = computed(() => ({
+    'letter--right': props.letter?.isRight,
+    'letter--wrong': props.letter?.isWrong,
+    'letter--almost': props.letter?.isAlmost,
+    'letter--animate': props.isAnimate,
+}));
 </script>
 
 <style lang="scss" scoped>
@@ -36,8 +40,8 @@
         user-select: none;
 
         &--right {
-            color: $black;
             background-color: $yellow;
+            color: $black;
         }
 
         &--wrong {
@@ -45,8 +49,8 @@
         }
 
         &--almost {
-            color: $black;
             background-color: $white;
+            color: $black;
         }
 
         &--animate {

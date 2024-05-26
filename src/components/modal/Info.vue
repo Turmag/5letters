@@ -1,12 +1,16 @@
 <template>
-    <vue-final-modal v-model="state.isShowInfo" classes="modal" content-class="modal__content">
+    <vue-final-modal v-model="store.isShowInfo" classes="modal" content-class="modal__content">
         <div class="modal__close" @click="closeModal">
             <IconClose color="#fff" width="20" height="20" />
         </div>
-        <div v-if="isRules" class="modal__back" @click="setIsRules(false)">&lt;</div>
+        <div v-if="isRules" class="modal__back" @click="setIsRules(false)">
+            &lt;
+        </div>
         <div class="modal__content-inner">
             <template v-if="isRules">
-                <div class="modal__title">Правила игры «5 букв»</div>
+                <div class="modal__title">
+                    Правила игры «5 букв»
+                </div>
                 <div class="modal__text">
                     Каждый день что-то происходит! Если вы об этом не знали - знайте! Здесь можно
                     отгадать слова и получить самые необычные призы!
@@ -16,7 +20,7 @@
                     разберём, что вообще тут происходит. После отправки слова у букв будет меняться
                     цвет фона. Что это значит вообще?! А вот что!
                 </div>
-                <div class="modal__line"></div>
+                <div class="modal__line" />
                 <div class="modal__letters">
                     <Letter
                         v-for="(item, index) in lettersFirst"
@@ -53,7 +57,7 @@
                 <div class="modal__text modal__text--mt modal__text--mb">
                     Когда слово угадано - все буквы будут на жёлтом фоне. И это здорово!
                 </div>
-                <div class="modal__line"></div>
+                <div class="modal__line" />
                 <div class="modal__text">
                     Так-так-так. Играйте в своё удовольствие, сколько захотите. И помните - мир
                     интереснее, чем вам кажется!
@@ -70,12 +74,16 @@
                 </div>
                 <div class="modal__text modal__text--mt">
                     По всем вопросам и предложениям пишите
-                    <a href="https://t.me/Turmag" target="_blank">мне в Telegram</a> - отвечу!
+                    <a href="https://t.me/Turmag" target="_blank">
+                        мне в Telegram
+                    </a> - отвечу!
                     Приятного времяпревровождения!
                 </div>
             </template>
             <template v-else>
-                <div class="modal__title">Информация об игре</div>
+                <div class="modal__title">
+                    Информация об игре
+                </div>
                 <div class="modal__text">
                     Эта игра практически плагиат игры «5 букв»
                     <a href="https://5bukv.tinkoff.ru/" target="_blank">из Тинькофф</a>. Но сделана
@@ -89,20 +97,25 @@
                         note="игры «5 букв»"
                         @click="setIsRules(true)"
                     />
-                    <Block text="Ссылка" icon="link" note="focusinfo.ru/5letters" :isCopy="true" />
+                    <Block
+                        text="Ссылка"
+                        icon="link"
+                        note="focusinfo.ru/5letters"
+                        is-copy
+                    />
                 </div>
                 <div class="modal__additional">
                     <Block
                         text="Сохранить"
                         icon="save"
                         note="Сохранится в браузер"
-                        :isSave="true"
+                        is-save
                     />
                     <Block
                         text="Сбросить прогресс"
                         icon="reset"
                         note="Сбросится сохранение"
-                        :isReset="true"
+                        is-reset
                     />
                 </div>
             </template>
@@ -110,110 +123,110 @@
     </vue-final-modal>
 </template>
 
-<script setup>
-    import IconClose from '~icons/mdi/close';
-    import Block from './InfoBlock.vue';
-    import Letter from './../letters/Letter.vue';
-    import { ref } from 'vue';
-    import { useStore } from 'vuex';
-    const store = useStore();
-    const state = store.state.modal;
-    let isRules = ref(false);
-    const lettersFirst = [
-        {
-            letter: 'В',
-            isAlmost: true,
-        },
-        {
-            letter: 'А',
-            isAlmost: true,
-        },
-        {
-            letter: 'Л',
-            isWrong: true,
-        },
-        {
-            letter: 'И',
-            isWrong: true,
-        },
-        {
-            letter: 'К',
-            isWrong: true,
-        },
-    ];
-    const lettersSecond = [
-        {
-            letter: 'Т',
-            isRight: true,
-        },
-        {
-            letter: 'Р',
-            isWrong: true,
-        },
-        {
-            letter: 'А',
-            isWrong: true,
-        },
-        {
-            letter: 'В',
-            isRight: true,
-        },
-        {
-            letter: 'А',
-            isRight: true,
-        },
-    ];
-    const lettersThird = [
-        {
-            letter: 'Т',
-            isRight: true,
-        },
-        {
-            letter: 'Ы',
-            isRight: true,
-        },
-        {
-            letter: 'К',
-            isRight: true,
-        },
-        {
-            letter: 'В',
-            isRight: true,
-        },
-        {
-            letter: 'А',
-            isRight: true,
-        },
-    ];
+<script setup lang="ts">
+import IconClose from '~icons/mdi/close';
+import Block from '@/components/modal/InfoBlock.vue';
+import Letter from '@/components/letters/Letter.vue';
+import { ref } from 'vue';
+import { modalStore } from '@/store/modal';
 
-    const closeModal = () => store.commit('setIsShowInfo', false);
-    const setIsRules = val => (isRules.value = val);
+const store = modalStore();
+const isRules = ref(false);
+const lettersFirst = [
+    {
+        letter: 'В',
+        isAlmost: true,
+    },
+    {
+        letter: 'А',
+        isAlmost: true,
+    },
+    {
+        letter: 'Л',
+        isWrong: true,
+    },
+    {
+        letter: 'И',
+        isWrong: true,
+    },
+    {
+        letter: 'К',
+        isWrong: true,
+    },
+];
+const lettersSecond = [
+    {
+        letter: 'Т',
+        isRight: true,
+    },
+    {
+        letter: 'Р',
+        isWrong: true,
+    },
+    {
+        letter: 'А',
+        isWrong: true,
+    },
+    {
+        letter: 'В',
+        isRight: true,
+    },
+    {
+        letter: 'А',
+        isRight: true,
+    },
+];
+const lettersThird = [
+    {
+        letter: 'Т',
+        isRight: true,
+    },
+    {
+        letter: 'Ы',
+        isRight: true,
+    },
+    {
+        letter: 'К',
+        isRight: true,
+    },
+    {
+        letter: 'В',
+        isRight: true,
+    },
+    {
+        letter: 'А',
+        isRight: true,
+    },
+];
+
+const closeModal = () => store.setIsShowInfo(false);
+const setIsRules = val => isRules.value = val;
 </script>
 
 <style lang="scss">
     .modal {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
 
         &__content {
             position: relative;
+            overflow: hidden;
             width: 550px;
             min-height: 200px;
             max-height: 500px;
-            padding: 60px 16px 16px 16px;
-            overflow: hidden;
+            padding: 60px 16px 16px;
+            border-radius: 20px;
             background-color: $gray-modal;
             color: $white;
-            border-radius: 20px;
             box-shadow: 0 4px 32px rgb(255 255 255 / 10%);
         }
 
         &__content-inner {
+            overflow: auto;
             height: 100%;
             max-height: 500px;
             padding-right: 16px;
-            overflow: auto;
 
             &::-webkit-scrollbar {
                 width: 8px;
@@ -222,7 +235,7 @@
 
             &::-webkit-scrollbar-thumb {
                 border-radius: 8px;
-                background: #ffffff;
+                background: #fff;
             }
 
             &::-webkit-scrollbar-track {
@@ -233,15 +246,15 @@
 
         &__close {
             position: absolute;
-            right: 16px;
             top: 16px;
+            right: 16px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 30px;
             height: 30px;
-            background-color: $gray-modal-inner;
             border-radius: 50%;
+            background-color: $gray-modal-inner;
             cursor: pointer;
             user-select: none;
 
@@ -256,15 +269,15 @@
 
         &__back {
             position: absolute;
-            left: 16px;
             top: 16px;
+            left: 16px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 30px;
             height: 30px;
-            background-color: $gray-modal-inner;
             border-radius: 50%;
+            background-color: $gray-modal-inner;
             cursor: pointer;
             user-select: none;
 
@@ -278,8 +291,8 @@
         }
 
         &__title {
-            text-align: center;
             margin-bottom: 20px;
+            text-align: center;
             font-size: 20px;
             color: $yellow;
         }

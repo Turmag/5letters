@@ -8,34 +8,45 @@
                 <template v-else-if="item.isActive">
                     <IconCheck width="30" height="30" />
                 </template>
-                <template v-else>{{ item.step }}</template>
+                <template v-else>
+                    {{ item.step }}
+                </template>
             </div>
-            <div v-if="item.isDecor" class="item__inner-decor"></div>
+            <div v-if="item.isDecor" class="item__inner-decor" />
         </div>
         <div class="item__name">
             <template v-if="item.word">
                 {{ item.word }}
             </template>
             <template v-else>
-                <IconCircle v-for="item in 5" :key="item" width="10" height="10" color="#414143" />
+                <IconCircle
+                    v-for="i in 5"
+                    :key="i"
+                    width="10"
+                    height="10"
+                    color="#414143"
+                />
             </template>
         </div>
     </div>
 </template>
 
-<script setup>
-    import IconGift from '~icons/carbon/gift';
-    import IconCircle from '~icons/carbon/circle-solid';
-    import IconCheck from '~icons/mdi/check';
-    import { computed } from 'vue';
-    const props = defineProps({
-        item: { type: Object, default: () => ({}) },
-    });
-    const itemClass = computed(() => {
-        return {
-            'item--active': props.item.isActive,
-        };
-    });
+<script setup lang="ts">
+import IconGift from '~icons/carbon/gift';
+import IconCircle from '~icons/carbon/circle-solid';
+import IconCheck from '~icons/mdi/check';
+import { computed } from 'vue';
+import { PanelItem } from '@/services/types';
+
+interface Props {
+    item: PanelItem;
+}
+
+const props = defineProps<Props>();
+
+const itemClass = computed(() => {
+    return { 'item--active': props.item.isActive };
+});
 </script>
 
 <style lang="scss" scoped>
@@ -56,8 +67,8 @@
             justify-content: center;
             width: 70px;
             height: 70px;
-            background-color: $gray-modal-inner;
             border-radius: 50%;
+            background-color: $gray-modal-inner;
             font-size: 25px;
             color: $gray-lighten;
         }

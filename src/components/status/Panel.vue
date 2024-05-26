@@ -1,20 +1,20 @@
 <template>
     <div class="panel">
-        <div class="panel__title" v-html="title"></div>
+        <div class="panel__title" v-html="title" />
         <div class="panel__items">
-            <Item v-for="(item, i) in state.panelItems" :key="i" :item="item" />
+            <Item v-for="(item, i) in store.panelItems" :key="i" :item="item" />
         </div>
     </div>
 </template>
 
-<script setup>
-    import Item from './Item.vue';
-    import { computed } from 'vue';
-    import { useStore } from 'vuex';
-    const store = useStore();
-    const state = store.state.main;
+<script setup lang="ts">
+import Item from '@/components/status/Item.vue';
+import { computed } from 'vue';
+import { mainStore } from '@/store/main';
 
-    const title = computed(() => 'Играйте <br />и получайте удовольствие!');
+const store = mainStore();
+
+const title = computed(() => 'Играйте <br />и получайте удовольствие!');
 </script>
 
 <style lang="scss" scoped>
@@ -22,19 +22,19 @@
         position: fixed;
         bottom: 0;
         left: 0;
+        box-sizing: border-box;
         width: 100%;
         min-height: 200px;
         padding: 30px;
-        background-color: $gray-modal;
         border-radius: 20px 20px 0 0;
-        box-sizing: border-box;
+        background-color: $gray-modal;
 
         &__title {
-            color: $yellow;
             text-align: center;
             font-size: 30px;
-            font-weight: bold;
             line-height: 35px;
+            color: $yellow;
+            font-weight: bold;
         }
 
         &__items {

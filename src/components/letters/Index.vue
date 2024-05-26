@@ -5,35 +5,36 @@
             :key="index"
             :letter="item"
             :index="index"
-            :isAnimate="true"
+            is-animate
         />
     </div>
 </template>
 
-<script setup>
-    import Letter from './Letter.vue';
-    const letters = [
-        {
-            letter: '5',
-            isRight: true,
-        },
-        {
-            letter: 'Б',
-            isRight: true,
-        },
-        {
-            letter: 'У',
-            isRight: true,
-        },
-        {
-            letter: 'К',
-            isRight: true,
-        },
-        {
-            letter: 'В',
-            isRight: true,
-        },
-    ];
+<script setup lang="ts">
+import Letter from '@/components/letters/Letter.vue';
+
+const letters = [
+    {
+        letter: '5',
+        isRight: true,
+    },
+    {
+        letter: 'Б',
+        isRight: true,
+    },
+    {
+        letter: 'У',
+        isRight: true,
+    },
+    {
+        letter: 'К',
+        isRight: true,
+    },
+    {
+        letter: 'В',
+        isRight: true,
+    },
+];
 </script>
 
 <style lang="scss" scoped>
