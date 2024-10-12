@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { getRandom } from '@/assets/js/functions';
-import {
-    PanelItem, Trial, Letter, 
-} from '@/services/types';
+import { getRandom } from '@/shared/helpers';
+import type {
+    IPanelItem, ITrial, ILetter, 
+} from '@/shared/types';
 import { useLocalStorage } from '@vueuse/core';
 import { modalStore } from '@/store/modal';
 
@@ -20,7 +20,7 @@ export const mainStore = defineStore('main', {
                 {},
                 {},
                 {},
-            ] as Trial[],
+            ] as ITrial[],
             trialIndex: 0,
             winsCount: 0,
             isWin: false,
@@ -48,7 +48,7 @@ export const mainStore = defineStore('main', {
                     step: 5,
                     isGift: true,
                 },
-            ] as PanelItem[],
+            ] as IPanelItem[],
         };
     },
     actions: {
@@ -158,7 +158,7 @@ export const mainStore = defineStore('main', {
         },
 
         checkTrial() {
-            const letters = this.trials[this.trialIndex].letters = [] as Letter[];
+            const letters = this.trials[this.trialIndex].letters = [] as ILetter[];
             const rightIndexes = [];
             const compareWord: string[] = [];
             this.currentWord.forEach((el, i) => {

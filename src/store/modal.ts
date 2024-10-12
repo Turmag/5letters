@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Prize } from '@/services/types';
+import type { IPrize } from '@/shared/types';
 
 export const modalStore = defineStore('modal', {
     state: () => {
@@ -117,7 +117,7 @@ export const modalStore = defineStore('modal', {
                     img: 'gin-lamp.png',
                     wordsToOpen: 60,
                 },
-            ] as Prize[],
+            ] as IPrize[],
         };
     },
     actions: {

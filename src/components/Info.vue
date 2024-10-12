@@ -22,7 +22,6 @@
     </div>
 </template>
 
-
 <script setup lang="ts">
 import { modalStore } from '@/store/modal';
 import { mainStore } from '@/store/main';

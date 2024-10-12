@@ -30,15 +30,15 @@
 <script setup lang="ts">
 import { computed, useCssModule } from 'vue';
 import { modalStore } from '@/store/modal';
-import { declOfNum } from '@/assets/js/functions';
-import { Prize } from '@/services/types';
+import { declOfNum } from '@/shared/helpers';
+import type { IPrize } from '@/shared/types';
 
-interface Props {
-    prize: Prize;
+interface IProps {
+    prize: IPrize;
     index: number;
 }
 
-const props = defineProps<Props>();
+const props = defineProps<IProps>();
 
 const store = modalStore();
 const $style = useCssModule();

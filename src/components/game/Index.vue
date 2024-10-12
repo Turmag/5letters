@@ -34,12 +34,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
 import Row from '@/components/game/Row.vue';
-import { computed, ref } from 'vue';
 import { mainStore } from '@/store/main';
-import { declOfNum } from '@/assets/js/functions';
+import { declOfNum } from '@/shared/helpers';
 
-const row = ref();
+const row = useTemplateRef('row');
 const store = mainStore();
 
 const lostLetters = computed(() => {
@@ -59,8 +59,8 @@ const trialsWord = computed(() => {
 const enterFocus = () => {
     const rows = row.value;
 
-    if (rows[store.trialIndex]) {
-        setTimeout(() => rows[store.trialIndex].focusField(0), 0);
+    if (rows?.[store.trialIndex]) {
+        setTimeout(() => rows?.[store.trialIndex]?.focusField(0), 0);
     }
 };
 const setNewWord = () => {

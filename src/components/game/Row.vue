@@ -40,18 +40,18 @@
 </template>
 
 <script setup lang="ts">
-import Field from '@/components/game/Field.vue';
 import { computed, ref } from 'vue';
+import Field from '@/components/game/Field.vue';
+import type { ILetter } from '@/shared/types';
 import { mainStore } from '@/store/main';
-import { Letter } from '@/services/types';
 
-interface Props {
+interface IProps {
     isActive?: boolean;
     isAnimate?: boolean;
-    letters?: Letter[];
+    letters?: ILetter[];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IProps>(), {
     isActive: false,
     isAnimate: false,
     letters: () => [],

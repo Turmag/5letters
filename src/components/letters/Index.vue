@@ -13,28 +13,10 @@
 <script setup lang="ts">
 import Letter from '@/components/letters/Letter.vue';
 
-const letters = [
-    {
-        letter: '5',
-        isRight: true,
-    },
-    {
-        letter: 'Б',
-        isRight: true,
-    },
-    {
-        letter: 'У',
-        isRight: true,
-    },
-    {
-        letter: 'К',
-        isRight: true,
-    },
-    {
-        letter: 'В',
-        isRight: true,
-    },
-];
+const letters = '5БУКВ'.split('').map(letter => ({
+    letter,
+    isRight: true,
+}));
 </script>
 
 <style lang="scss" module>

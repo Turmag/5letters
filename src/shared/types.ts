@@ -1,11 +1,11 @@
-export interface Letter {
+export interface ILetter {
     letter?: string;
     isRight?: boolean;
     isWrong?: boolean;
     isAlmost?: boolean;
 }
 
-export interface Prize {
+export interface IPrize {
     name: string;
     receivedMessage: string;
     img: string;
@@ -15,7 +15,7 @@ export interface Prize {
     isRound?: boolean;
 }
 
-export interface PanelItem {
+export interface IPanelItem {
     step: number;
     isDecor?: boolean;
     isGift?: boolean;
@@ -23,13 +23,13 @@ export interface PanelItem {
     word?: string;
 }
 
-export interface Trial {
+export interface ITrial {
     isActive?: boolean;
     isAnimate?: boolean;
-    letters?: Letter[];
+    letters?: ILetter[];
 }
 
-export interface FiveLettersData {
+export interface IFiveLettersData {
     words: string[];
     receivedPrizes: boolean[];
     isGameFinished: boolean;

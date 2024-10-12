@@ -24,14 +24,14 @@ import words from '@/words.json';
 import { mainStore } from '@/store/main';
 import { modalStore } from '@/store/modal';
 import { useLocalStorage } from '@vueuse/core';
-import { FiveLettersData } from '@/services/types';
+import type { IFiveLettersData } from '@/shared/types';
 
 const fiveLettersDataStorage = useLocalStorage('5lettersData', '{}').value;
 const store = mainStore();
 const storeModal = modalStore();
 store.setSearchWords(words);
 
-let fiveLettersData = {} as FiveLettersData;
+let fiveLettersData = {} as IFiveLettersData;
 if (fiveLettersDataStorage) fiveLettersData = JSON.parse(fiveLettersDataStorage);
 if (fiveLettersData.words) {
     const winsCount = fiveLettersData.words.length;

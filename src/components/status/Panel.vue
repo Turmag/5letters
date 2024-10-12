@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import Item from '@/components/status/Item.vue';
 import { computed } from 'vue';
+import Item from '@/components/status/Item.vue';
 import { mainStore } from '@/store/main';
 
 const store = mainStore();

@@ -9,15 +9,15 @@
 
 <script setup lang="ts">
 import { computed, useCssModule } from 'vue';
-import { Letter } from '@/services/types';
+import type { ILetter } from '@/shared/types';
 
-interface Props {
-    letter: Letter;
+interface IProps {
+    letter: ILetter;
     index: number;
     isAnimate?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), { isAnimate: false });
+const props = withDefaults(defineProps<IProps>(), { isAnimate: false });
 
 const $style = useCssModule();
 const letterClass = computed(() => ({

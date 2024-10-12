@@ -40,7 +40,7 @@ import { ref, computed } from 'vue';
 import { mainStore } from '@/store/main';
 import { useLocalStorage } from '@vueuse/core';
 
-interface Props {
+interface IProps {
     text: string;
     icon: string;
     note: string;
@@ -49,7 +49,7 @@ interface Props {
     isReset?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IProps>(), {
     isCopy: false,
     isSave: false,
     isReset: false,

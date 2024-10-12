@@ -19,17 +19,17 @@ import {
     onMounted,
     useCssModule,
 } from 'vue';
+import type { ILetter } from '@/shared/types';
 import { mainStore } from '@/store/main';
-import { Letter } from '@/services/types';
 
-interface Props {
+interface IProps {
     index: number;
     isActive?: boolean;
     isAnimate?: boolean;
-    letter?: Letter;
+    letter?: ILetter;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IProps>(), {
     isActive: false,
     isAnimate: false,
     letter: () => ({}),
@@ -57,7 +57,7 @@ const letterClass = computed(() => ({
 }));
 
 const determineKeyupAction = async (e: KeyboardEvent) => {
-    if (e.keyCode === 13) {
+    if (e.key === 'Enter') {
         if (isActiveCheck.value) {
             store.checkTrialAction();
             if ((store.isLost || store.isWin) && store.searchWords.length) {

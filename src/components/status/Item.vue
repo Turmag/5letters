@@ -34,13 +34,13 @@
 
 <script setup lang="ts">
 import { computed, useCssModule } from 'vue';
-import { PanelItem } from '@/services/types';
+import type { IPanelItem } from '@/shared/types';
 
-interface Props {
-    item: PanelItem;
+interface IProps {
+    item: IPanelItem;
 }
 
-const props = defineProps<Props>();
+const props = defineProps<IProps>();
 const $style = useCssModule();
 
 const itemClass = computed(() => {

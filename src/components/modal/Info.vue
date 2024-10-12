@@ -108,9 +108,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import Block from '@/components/modal/InfoBlock.vue';
 import Letter from '@/components/letters/Letter.vue';
-import { ref } from 'vue';
 import { modalStore } from '@/store/modal';
 
 const store = modalStore();
@@ -159,28 +159,11 @@ const lettersSecond = [
         isRight: true,
     },
 ];
-const lettersThird = [
-    {
-        letter: 'Т',
-        isRight: true,
-    },
-    {
-        letter: 'Ы',
-        isRight: true,
-    },
-    {
-        letter: 'К',
-        isRight: true,
-    },
-    {
-        letter: 'В',
-        isRight: true,
-    },
-    {
-        letter: 'А',
-        isRight: true,
-    },
-];
+
+const lettersThird = 'ТЫКВА'.split('').map(letter => ({
+    letter,
+    isRight: true,
+}));
 
 const closeModal = () => store.setIsShowInfo(false);
 const setIsRules = (value: boolean) => isRules.value = value;
